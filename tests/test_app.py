@@ -43,3 +43,8 @@ def test_health():
 
     assert response.status_code == 200
     assert response.json["status"] == "ok"
+
+def test_home_cloud_technologies():
+    client = app.test_client()
+    response = client.get("/")
+    assert b"Cloud Technologies" in response.data

@@ -47,6 +47,7 @@ def home():
     <body>
         <h1>Cloud Shop</h1>
         <h2>Интернет-магазин компьютеров и комплектующих</h2>
+        <p>Cloud Technologies</p>
         <p>Добро пожаловать в Cloud Shop!</p>
         <p><a href="/products">Посмотреть товары</a></p>
         <p><a href="/health">Проверить состояние приложения</a></p>

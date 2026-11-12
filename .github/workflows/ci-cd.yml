@@ -53,3 +53,24 @@ jobs:
           context: .
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/cloud-shop:latest
+  deploy:
+    needs: push-to-dockerhub
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Deploy container
+        run: |
+          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/cloud-shop:latest
+          docker rm -f cloud-shop || true
+          docker run -d --name cloud-shop -p 5000:5000 ${{ secrets.DOCKERHUB_USERNAME }}/cloud-shop:latest
+          sleep 5
+          docker ps
+          curl -f http://localhost:5000/health
+          curl -s http://localhost:5000 | grep "Cloud Technologies"
